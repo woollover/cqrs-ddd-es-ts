@@ -2,10 +2,12 @@ export interface ICommandResponse {
   status: boolean;
 }
 export default interface ICommand {
+  command_name: string;
+  args: string;
   execute: () => ICommandResponse;
 }
 
-export interface ICommandConfig {≥
+export interface ICommandConfig {
   command_name: string;
   args: any;
 }

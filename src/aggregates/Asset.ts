@@ -1,13 +1,14 @@
 import { randomUUID } from "crypto";
+import { Currency } from "../constants/Rates";
 
 export type AssetType = "cash" | "real_estate" | "crypto";
 
 export default class Asset {
   private type: AssetType;
-  private id: string;
+  id: string;
   private value: number;
   private name: string;
-  private currency: string; // better typing possibile
+  private currency: Currency; // better typing possibile
 
   constructor({
     type,
@@ -18,7 +19,7 @@ export default class Asset {
     type: AssetType;
     name: string;
     value: number;
-    currency: string;
+    currency: Currency;
   }) {
     this.type = type;
     this.id = randomUUID();

@@ -20,6 +20,10 @@ export default class DBClient {
     return this.items.filter((item) => (item.id = id));
   }
 
+  public getAll() {
+    return this.items;
+  }
+
   // delete
   public delete(id: string) {
     const item_index = this.items.findIndex((item) => item.id === id);
