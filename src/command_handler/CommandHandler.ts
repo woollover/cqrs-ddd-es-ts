@@ -3,7 +3,7 @@ import ICommand, { ICommandResponse } from "../commands/Command";
 import CreateAsset from "../commands/asset_commands/CreateAsset";
 import DBClient from "../db/DBClient";
 
-export async function CommandRouter({
+export async function CommandHandler({
   _command,
   eventEmitter,
   writeDBClient,
@@ -14,13 +14,14 @@ export async function CommandRouter({
 }): Promise<ICommandResponse | Error> {
   switch (_command.command_name) {
     case "create.asset":
-      console.log(`${_command.command_name} command received`);
+      console.log(`🟨 - ${_command.command_name} command received`);
       const handler = new CreateAsset({
         command_name: _command.command_name,
         args: _command.args,
         writeDBClient,
         eventEmitter,
       });
+      console.log("🟨 - HANDLER ", handler);
       return handler.execute();
 
     case "update.asset.value":

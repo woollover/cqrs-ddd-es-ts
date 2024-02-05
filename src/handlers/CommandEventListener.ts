@@ -1,6 +1,6 @@
 import { EventEmitter } from "events";
-import { CommandRouter } from "../command_router/CommandRouter";
-
+import { CommandHandler } from "../command_handler/CommandHandler";
+import { WriteDB } from "..";
 export class CommandEventListener {
   private eventEmitter: EventEmitter;
 
@@ -16,7 +16,12 @@ export class CommandEventListener {
        * The commandRouter handles the command and check validity of the request against the
        * domain contraints, applies the command and emits the domain event
        */
-      let response = await CommandRouter(payload);
+      console.log("PAYLOAD RECEIVED", payload);
+      let response = await CommandHandler({
+        _command: payload,
+        eventEmitter: this.eventEmitter,
+        writeDBClient: WriteDB,
+      });
 
       if (response instanceof Error) {
         throw response;

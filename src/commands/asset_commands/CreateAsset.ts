@@ -29,14 +29,14 @@ export default class CreateAsset implements ICommand {
 
   execute() {
     // create the aggregate
-
     const asset = new Asset({
       type: this.args.type,
       name: this.args.name,
       value: this.args.value,
       currency: this.args.currency,
+      institution_id: this.args.institution_id,
     });
-
+    console.log("🟨 - ASSET: ", asset);
     // check against policies
     if (Object.keys(CurrencyRates).includes(this.args.currency) == false) {
       throw new Error(
@@ -48,7 +48,7 @@ export default class CreateAsset implements ICommand {
     this.db.put(asset);
 
     // emit the event in the eventEmitter
-    this.eventEmitter.emit("AssetCreated", { asset, ts: Date.now() });
+    this.eventEmitter.emit("AssetAdded", { asset, ts: Date.now() });
 
     return {
       status: true,

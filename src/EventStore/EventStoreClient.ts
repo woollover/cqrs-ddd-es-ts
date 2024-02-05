@@ -25,6 +25,10 @@ export default class EventStoreClient {
     );
   }
 
+  public getAll() {
+    return this.items;
+  }
+
   public getOffset() {
     return this.items.length;
   }

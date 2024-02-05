@@ -1,7 +1,7 @@
 export type BankData = {
   logo: string;
   name: string;
-  nations: string[];
+  countries: string[];
 };
 
 export type BanksData = {
@@ -12,17 +12,17 @@ export const Banks: BanksData = {
   THV000: {
     logo: "/BNK00000.png",
     name: "Thieves Unite Bank",
-    nations: ["IT"],
+    countries: ["IT"],
   },
   COWXXX: {
     logo: "/BNK0001.png",
     name: "Cowolanum Bank",
-    nations: ["IT", "UK", "US"],
+    countries: ["IT", "UK", "US"],
   },
   FIN999: {
     logo: "/BNK0002.png",
     name: "Fin Nine Nine Nine Bank",
-    nations: ["IT", "DK"],
+    countries: ["IT", "DK"],
   },
 };
 

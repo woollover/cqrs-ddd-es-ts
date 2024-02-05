@@ -2,7 +2,6 @@ import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
 import DBClient from "./db/DBClient";
 import EventStoreClient from "./EventStore/EventStoreClient";
-import { CommandRouter } from "./command_router/CommandRouter";
 import EventEmitter from "events";
 import { CommandEventListener } from "./handlers/CommandEventListener";
 import { DomainEventsListener } from "./handlers/EventListener";
@@ -14,14 +13,14 @@ app.use(express.json());
 
 const port = process.env.PORT || 3000;
 
-const ReadDB = new DBClient();
-const WriteDB = new DBClient();
-const EventStore = new EventStoreClient();
+export const ReadDB = new DBClient();
+export const WriteDB = new DBClient();
+export const EventStore = new EventStoreClient();
 
 const eventEmitter = new EventEmitter();
 
 const commandBroker = new CommandEventListener(eventEmitter);
-const eventBroker = new DomainEventsListener(eventEmitter);
+const eventBroker = new DomainEventsListener(eventEmitter, EventStore, ReadDB);
 
 /**
  * The commandsEventListener listens for commands and mimics a command bus, it will handle each command
@@ -56,6 +55,20 @@ app.get("/assets", (req: Request, res: Response) => {
 
   res.send({
     data: assets,
+  });
+});
+app.get("/write_db_debug", (req: Request, res: Response) => {
+  const assets = WriteDB.getAll();
+
+  res.send({
+    data: assets,
+  });
+});
+app.get("/event_store_db", (req: Request, res: Response) => {
+  const events = EventStore.getAll();
+
+  res.send({
+    data: events,
   });
 });
 
