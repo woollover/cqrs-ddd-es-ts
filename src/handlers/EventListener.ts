@@ -38,7 +38,7 @@ export class DomainEventsListener {
       });
 
       console.log("✅ - event created: ", event);
-      
+
       this.eventDB.put(event);
       // create the projection
       const readAssetModel = new AssetReadModel({
@@ -46,9 +46,9 @@ export class DomainEventsListener {
         banks: Banks,
         rates: CurrencyRates,
       });
-
+      const projection = readAssetModel.craftView();
       // save in the read DB
-      this.readDB.put(readAssetModel);
+      this.readDB.put(projection);
     });
   }
 }
