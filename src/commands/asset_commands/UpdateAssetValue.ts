@@ -36,12 +36,17 @@ export default class UpdateAssetValue
   }
 
   execute() {
-    
     const assetData = this.db.get(this.args.id)[0] as Asset;
     //      ^?
-
+    if (!assetData) {
+      return {
+        status: false,
+        message: "Asset Data not found",
+      };
+    }
     // create the entity
     const asset = new Asset({
+      id: assetData.id,
       currency: assetData.currency,
       institution_id: assetData.institution_id,
       name: assetData.name,

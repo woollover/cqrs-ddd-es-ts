@@ -12,12 +12,14 @@ export default class Asset {
   institution_id: string;
 
   constructor({
+    id,
     type,
     name,
     value,
     currency,
     institution_id,
   }: {
+    id?: string;
     type: AssetType;
     name: string;
     value: number;
@@ -25,7 +27,7 @@ export default class Asset {
     institution_id: string;
   }) {
     this.type = type;
-    this.id = randomUUID();
+    this.id = id ? id : randomUUID();
     this.name = name;
     this.value = value;
     this.currency = currency;
