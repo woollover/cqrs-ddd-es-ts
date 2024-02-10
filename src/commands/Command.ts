@@ -1,17 +1,13 @@
 export interface ICommandResponse {
   status: boolean;
 }
-export default interface ICommand {
+export default interface ICommand<T> {
   command_name: string;
-  args: string;
+  args: T;
   execute: () => ICommandResponse;
 }
 
 export interface ICommandConfig {
   command_name: string;
   args: any;
-}
-
-export interface ICommandFactory {
-  craftCommand: (config: ICommandConfig) => ICommand | Error;
 }

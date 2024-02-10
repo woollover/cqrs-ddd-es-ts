@@ -1,10 +1,18 @@
 import EventEmitter from "events";
-import Asset from "../../aggregates/Asset";
+import Asset, { AssetType } from "../../aggregates/Asset";
 import ICommand from "../Command";
 import DBClient from "../../db/DBClient";
-import { CurrencyRates } from "../../constants/Rates";
+import { Currency, CurrencyRates } from "../../constants/Rates";
 
-export default class CreateAsset implements ICommand {
+export interface CreateAssetArgs {
+  name: string;
+  type: AssetType;
+  currency: Currency;
+  value: number; 
+  institution_id: string;
+}
+
+export default class CreateAsset implements ICommand<CreateAssetArgs> {
   args;
   command_name: string;
   private eventEmitter: EventEmitter;
@@ -17,7 +25,7 @@ export default class CreateAsset implements ICommand {
     writeDBClient,
   }: {
     command_name: string;
-    args: any; // how can I type this dynamically?
+    args: CreateAssetArgs; // how can I type this dynamically?
     eventEmitter: EventEmitter;
     writeDBClient: DBClient;
   }) {

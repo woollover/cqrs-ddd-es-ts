@@ -50,5 +50,31 @@ export class DomainEventsListener {
       // save in the read DB
       this.readDB.put(projection);
     });
+    this.eventEmitter.on("AssetValueUpdated", (payload) => {
+      console.log("Domain EVENT Received", payload);
+      // create the aggregate
+      //const factory = new AssetAggregateFactory();
+
+      // save the event in the event store
+      const event = new Event({
+        event_name: "asset_value_updated",
+        aggregate_root_id: payload.asset.id,
+        command_id: payload.command_id,
+        payload: payload,
+      });
+
+      console.log("✅ - event created: ", event);
+
+      this.eventDB.put(event);
+      // create the projection
+      const readAssetModel = new AssetReadModel({
+        asset: payload.asset,
+        banks: Banks,
+        rates: CurrencyRates,
+      });
+      const projection = readAssetModel.craftView();
+      // save in the read DB
+      this.readDB.put(projection);
+    });
   }
 }

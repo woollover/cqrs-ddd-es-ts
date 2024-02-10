@@ -30,7 +30,6 @@ commandBroker.registerCommandEventListener();
  * The eventBroker will collect the domain events and handles them
  */
 eventBroker.registerDomainEventListener();
-
 /**
  * Endpoints
  */
@@ -49,7 +48,11 @@ app.post("/command", (req: Request, res: Response) => {
     received_body: req.body,
   });
 });
-
+/**
+ *
+ * Route to retrieve the read model (ex consumed by a FE)
+ *
+ */
 app.get("/assets", (req: Request, res: Response) => {
   const assets = ReadDB.getAll();
 
@@ -57,6 +60,12 @@ app.get("/assets", (req: Request, res: Response) => {
     data: assets,
   });
 });
+
+/**
+ *
+ * route to retrieve all the aggregate in the write DB
+ *
+ */
 app.get("/write_db_debug", (req: Request, res: Response) => {
   const assets = WriteDB.getAll();
 
@@ -64,6 +73,12 @@ app.get("/write_db_debug", (req: Request, res: Response) => {
     data: assets,
   });
 });
+
+/**
+ *
+ * route to retrieve all the events
+ *
+ */
 app.get("/event_store_db", (req: Request, res: Response) => {
   const events = EventStore.getAll();
 
