@@ -30,7 +30,6 @@ commandBroker.registerCommandEventListener();
  * The eventBroker will collect the domain events and handles them
  */
 eventBroker.registerDomainEventListener();
-
 /**
  * Endpoints
  */

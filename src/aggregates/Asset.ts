@@ -51,4 +51,8 @@ export default class Asset {
   getInstitutionID() {
     return this.institution_id;
   }
+  setValue(value: number, currency: Currency = this.currency) {
+    this.currency = currency;
+    this.value = value;
+  }
 }

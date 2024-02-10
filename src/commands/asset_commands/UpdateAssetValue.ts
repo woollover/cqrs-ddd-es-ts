@@ -1,18 +1,18 @@
 import EventEmitter from "events";
-import Asset, { AssetType } from "../../aggregates/Asset";
+import Asset from "../../aggregates/Asset";
 import ICommand from "../Command";
 import DBClient from "../../db/DBClient";
 import { Currency, CurrencyRates } from "../../constants/Rates";
 
-export interface CreateAssetArgs {
-  name: string;
-  type: AssetType;
-  currency: Currency;
-  value: number; 
-  institution_id: string;
+export interface UpdateAssetValueCommandArgs {
+  id: string;
+  value: number;
+  currency?: Currency;
 }
 
-export default class CreateAsset implements ICommand<CreateAssetArgs> {
+export default class UpdateAssetValue
+  implements ICommand<UpdateAssetValueCommandArgs>
+{
   args;
   command_name: string;
   private eventEmitter: EventEmitter;
@@ -25,7 +25,7 @@ export default class CreateAsset implements ICommand<CreateAssetArgs> {
     writeDBClient,
   }: {
     command_name: string;
-    args: CreateAssetArgs; // how can I type this dynamically?
+    args: UpdateAssetValueCommandArgs; // how can I type this dynamically?
     eventEmitter: EventEmitter;
     writeDBClient: DBClient;
   }) {
@@ -36,27 +36,31 @@ export default class CreateAsset implements ICommand<CreateAssetArgs> {
   }
 
   execute() {
-    // create the aggregate
+    
+    const assetData = this.db.get(this.args.id)[0] as Asset;
+    //      ^?
+
+    // create the entity
     const asset = new Asset({
-      type: this.args.type,
-      name: this.args.name,
-      value: this.args.value,
-      currency: this.args.currency,
-      institution_id: this.args.institution_id,
+      currency: assetData.currency,
+      institution_id: assetData.institution_id,
+      name: assetData.name,
+      type: assetData.type,
+      value: assetData.value,
     });
     console.log("🟨 - ASSET: ", asset);
     // check against policies
-    if (Object.keys(CurrencyRates).includes(this.args.currency) == false) {
-      throw new Error(
-        "Validation error: you are using a currency that is not supported"
-      );
-    }
+
+    asset.setValue(
+      this.args.value,
+      this.args.currency ? this.args.currency : undefined
+    );
 
     // save to writeDB
     this.db.put(asset);
 
     // emit the event in the eventEmitter
-    this.eventEmitter.emit("AssetAdded", { asset, ts: Date.now() });
+    this.eventEmitter.emit("AssetUpdated", { asset, ts: Date.now() });
 
     return {
       status: true,
